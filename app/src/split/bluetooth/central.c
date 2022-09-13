@@ -435,6 +435,18 @@ static bool split_central_eir_parse(struct bt_data *data, void *user_data) {
     return true;
 }
 
+static bool is_static_peripheral(const bt_addr_le_t *addr) {
+	if (strlen(CONFIG_ZMK_SPLIT_BLE_PERIPHERAL_ADDR) == 0) {
+		return false;
+	}
+	bt_addr_le_t peripheral_addr;
+	int err = bt_addr_le_from_str(CONFIG_ZMK_SPLIT_BLE_PERIPHERAL_ADDR, "random", &peripheral_addr);
+	if (err) {
+		return false;
+	}
+	return !bt_addr_le_cmp(addr, &peripheral_addr);
+}
+
 static void split_central_device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
                                        struct net_buf_simple *ad) {
     char dev[BT_ADDR_LE_STR_LEN];
@@ -442,6 +454,22 @@ static void split_central_device_found(const bt_addr_le_t *addr, int8_t rssi, ui
     bt_addr_le_to_str(addr, dev, sizeof(dev));
     LOG_DBG("[DEVICE]: %s, AD evt type %u, AD data len %u, RSSI %i", log_strdup(dev), type, ad->len,
             rssi);
+
+	// Check if address matches hardcoded peripheral MAC address. This is only
+	// used while developing. TODO TODO TODO this section shouldn't be in the PR
+	if (is_static_peripheral(addr)) {
+		// If no existing connection to peripheral, connect to it. This check is
+		// necessary since my development peripheral will advertise
+		// continuously. This avoids connecting to it again instead of
+		// connecting to the second peripheral.
+		struct bt_conn *conn = bt_conn_lookup_addr_le(BT_ID_DEFAULT, addr);
+		if (conn == NULL) {
+			split_central_eir_found(addr);
+		} else {
+			bt_conn_unref(conn);
+		}
+		return;
+	}
 
     /* We're only interested in connectable events */
     if (type == BT_GAP_ADV_TYPE_ADV_IND || type == BT_GAP_ADV_TYPE_ADV_DIRECT_IND) {
