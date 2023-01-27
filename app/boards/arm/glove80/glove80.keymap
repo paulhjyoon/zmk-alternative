@@ -34,6 +34,7 @@
             bindings = <&mo LOWER>, <&to LOWER>;
         };
 
+        // mod/mod-shift tap-dance
         command_td: command_td_1 {
             compatible = "zmk,behavior-tap-dance";
             label = "COMMAND_TAP_DANCE";
@@ -56,6 +57,36 @@
             #binding-cells = <0>;
             tapping-term-ms = <200>;
             bindings = <&kp LCTRL>, <&kp LS(LCTRL)>;
+        };
+
+        // BT select/disconnect tap-dance
+        bt_1_td: bt_1_td_1 {
+            compatible = "zmk,behavior-tap-dance";
+            label = "BT1_TAP_DANCE";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&bt_1>, <&bt BT_DISCONNECT 1>;
+        };
+        bt_2_td: bt_2_td_1 {
+            compatible = "zmk,behavior-tap-dance";
+            label = "BT2_TAP_DANCE";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&bt_2>, <&bt BT_DISCONNECT 2>;
+        };
+        bt_3_td: bt_3_td_1 {
+            compatible = "zmk,behavior-tap-dance";
+            label = "BT3_TAP_DANCE";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&bt_3>, <&bt BT_DISCONNECT 3>;
+        };
+        bt_0_td: bt_0_td_1 {
+            compatible = "zmk,behavior-tap-dance";
+            label = "BT0_TAP_DANCE";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&bt_0>, <&bt BT_DISCONNECT 0>;
         };
     };
 
@@ -145,8 +176,8 @@
             &none             &none               &none           &none           &none           &none                                                                                &none      &none      &none      &none      &none      &none
             &none             &rgb_ug RGB_SPI     &rgb_ug RGB_SAI &rgb_ug RGB_HUI &rgb_ug RGB_BRI &rgb_ug RGB_TOG                                                                      &none      &none      &none      &none      &none      &none
             &bootloader       &rgb_ug RGB_SPD     &rgb_ug RGB_SAD &rgb_ug RGB_HUD &rgb_ug RGB_BRD &rgb_ug RGB_EFF                                                                      &none      &none      &none      &none      &none      &bootloader
-            &reset            &none               &none           &none           &none           &none           &bt_2     &bt_3     &none            &none     &none     &none       &none      &none      &none      &none      &none      &reset
-            &none             &none               &none           &none           &none                           &bt_0     &bt_1     &out OUT_USB     &none     &none     &none                  &none      &none      &none      &none      &to FACTORY_TEST
+            &reset            &none               &none           &none           &none           &none           &bt_2_td  &bt_3_td  &none            &none     &none     &none       &none      &none      &none      &none      &none      &reset
+            &none             &none               &none           &none           &none                           &bt_0_td  &bt_1_td  &out OUT_USB     &none     &none     &none                  &none      &none      &none      &none      &to FACTORY_TEST
             >;
         };
 
