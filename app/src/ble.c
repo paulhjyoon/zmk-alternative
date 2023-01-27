@@ -130,6 +130,27 @@ bool zmk_ble_active_profile_is_connected() {
     return true;
 }
 
+int zmk_ble_prof_disconnect(uint8_t index) {
+    if (index >= ZMK_BLE_PROFILE_COUNT)
+        return -1;
+
+    bt_addr_le_t *addr = &profiles[index].peer;
+    struct bt_conn *conn;
+    int result;
+
+    if (!bt_addr_le_cmp(addr, BT_ADDR_LE_ANY)) {
+        return -1;
+    } else if ((conn = bt_conn_lookup_addr_le(BT_ID_DEFAULT, addr)) == NULL) {
+        return -1;
+    }
+
+    result = bt_conn_disconnect(conn, BT_HCI_ERR_REMOTE_USER_TERM_CONN);
+    LOG_DBG("Disconnected from profile %d: %d", index, result);
+
+    bt_conn_unref(conn);
+    return result;
+}
+
 int8_t zmk_ble_profile_status(uint8_t index) {
     if (index >= ZMK_BLE_PROFILE_COUNT)
         return -1;
