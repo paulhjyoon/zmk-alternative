@@ -20,5 +20,12 @@
 			type = <RST_UF2>;
 			#binding-cells = <0>;
 		};
+
+		ota_bootloader: behavior_reset_dfu_ota {
+			compatible = "zmk,behavior-reset";
+			label = "OTA_BOOTLOAD";
+			type = <RST_OTA>;
+			#binding-cells = <0>;
+		};
 	};
 };
