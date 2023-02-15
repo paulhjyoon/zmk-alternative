@@ -59,6 +59,14 @@
             bindings = <&kp LCTRL>, <&kp LS(LCTRL)>;
         };
 
+        next_lock: next_lock_td_1 {
+            compatible = "zmk,behavior-tap-dance";
+            label = "NEXT_LOCK_TAP_DANCE";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&emacs_next>, <&kp LOCK>;
+        };
+
         // BT select/disconnect tap-dance
         bt_1_td: bt_1_td_1 {
             compatible = "zmk,behavior-tap-dance";
@@ -134,6 +142,15 @@
                 = <&out OUT_BLE>,
                   <&bt BT_SEL 3>;
         };
+
+        emacs_next: emacs_next_0 {
+            label = "Emacs_Next";
+                        compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings
+                = <&kp LC(X)>,
+                  <&kp GRAVE>;
+        };
     };
 
     magic: magic_hold_tap {
@@ -155,7 +172,7 @@
             &kp TAB        &kp Q       &kp W       &kp E       &kp R       &kp T                                                                       &kp Y   &kp U   &kp I       &kp O       &kp P       &kp BSLH
             &kp ESC        &kp A       &kp S       &kp D       &kp F       &kp G                                                                       &kp H   &kp J   &kp K       &kp L       &kp SEMI    &kp SQT
             &kp RET        &kp Z       &kp X       &kp C       &kp V       &kp B   &option_td  &command_td &kp HYPER  &layer_td  &kp RGUI &ctrl_td     &kp N   &kp M   &kp COMMA   &kp DOT     &kp FSLH    &kp LANG1
-            &magic MAGIC 0 &kp GRAVE   &kp LOCK    &kp LEFT    &kp RIGHT           &kp BSPC    &kp DEL     &kp LSHIFT &kp RSHIFT &kp RET  &kp SPACE            &kp UP  &kp DOWN    &kp LBKT    &kp RBKT    &kp LANG2
+            &magic MAGIC 0 &kp GRAVE   &next_lock  &kp LEFT    &kp RIGHT           &kp BSPC    &kp DEL     &kp LSHIFT &kp RSHIFT &kp RET  &kp SPACE            &kp UP  &kp DOWN    &kp LBKT    &kp RBKT    &kp LANG2
             >;
         };
 
@@ -166,7 +183,7 @@
             &trans            &none               &none           &kp UP          &none           &kp END                                                                               &kp RPAR     &kp KP_N7    &kp KP_N8    &kp KP_N9     &kp KP_MINUS    &kp SLCK
             &trans            &none               &kp LEFT        &kp DOWN        &kp RIGHT       &kp PGUP                                                                              &kp PRCNT    &kp KP_N4    &kp KP_N5    &kp KP_N6     &kp KP_PLUS     &none
             &trans            &kp K_CMENU         &none           &none           &none           &kp PGDN        &kp LANG1   &kp LANG2   &trans      &to DEFAULT &trans      &trans    &kp COMMA    &kp KP_N1    &kp KP_N2    &kp KP_N3     &kp KP_ENTER    &trans
-            &trans            &kp CAPS            &kp INS         &kp HOME        &kp END                         &trans      &trans      &trans      &trans      &trans      &kp KP_N0              &kp PG_UP    &kp PG_DN    &kp KP_DOT    &kp KP_ENTER    &trans
+            &trans            &kp CAPS            &kp LOCK        &kp HOME        &kp END                         &trans      &trans      &trans      &trans      &trans      &kp KP_N0              &kp PG_UP    &kp PG_DN    &kp KP_DOT    &kp KP_ENTER    &trans
             >;
         };
 
