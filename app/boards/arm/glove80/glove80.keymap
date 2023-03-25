@@ -12,9 +12,6 @@
 #include <dt-bindings/zmk/rgb.h>
 
 #define HYPER LC(LS(LG(LALT)))
-#define LOCK LG(LC(Q))
-#define JAPA LC(LS(J))
-#define ENGL LC(LS(SEMI))
 
 // layers
 #define DEFAULT 0
@@ -59,13 +56,17 @@
             bindings = <&kp LCTRL>, <&kp LS(LCTRL)>;
         };
 
-        next_lock: next_lock_td_1 {
-            compatible = "zmk,behavior-tap-dance";
-            label = "NEXT_LOCK_TAP_DANCE";
-            #binding-cells = <0>;
+        next_lock: next_lock_hold_tap {
+            compatible = "zmk,behavior-hold-tap";
+            label = "NEXT_LOCK_HOLD_TAP";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
             tapping-term-ms = <200>;
-            bindings = <&emacs_next>, <&kp LOCK>;
+            bindings = <&kp>, <&emacs_next>;
         };
+
+        #define LOCK LG(LC(Q))
+        #define NEXT_LOCK &next_lock LOCK 0
 
         // BT select/disconnect tap-dance
         bt_1_td: bt_1_td_1 {
@@ -172,7 +173,7 @@
             &kp TAB        &kp Q       &kp W       &kp E       &kp R       &kp T                                                                       &kp Y   &kp U   &kp I       &kp O       &kp P       &kp BSLH
             &kp ESC        &kp A       &kp S       &kp D       &kp F       &kp G                                                                       &kp H   &kp J   &kp K       &kp L       &kp SEMI    &kp SQT
             &kp RET        &kp Z       &kp X       &kp C       &kp V       &kp B   &option_td  &command_td &kp HYPER  &layer_td  &kp RGUI &ctrl_td     &kp N   &kp M   &kp COMMA   &kp DOT     &kp FSLH    &kp LANG1
-            &magic MAGIC 0 &kp GRAVE   &next_lock  &kp LEFT    &kp RIGHT           &kp BSPC    &kp DEL     &kp LSHIFT &kp RSHIFT &kp RET  &kp SPACE            &kp UP  &kp DOWN    &kp LBKT    &kp RBKT    &kp LANG2
+            &magic MAGIC 0 &kp GRAVE   NEXT_LOCK   &kp LEFT    &kp RIGHT           &kp BSPC    &kp DEL     &kp LSHIFT &kp RSHIFT &kp RET  &kp SPACE            &kp UP  &kp DOWN    &kp LBKT    &kp RBKT    &kp LANG2
             >;
         };
 
