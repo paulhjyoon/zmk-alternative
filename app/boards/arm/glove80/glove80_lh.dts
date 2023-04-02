@@ -134,5 +134,7 @@
 		, <&gpio1 3 GPIO_ACTIVE_HIGH> // LH COL1
 		, <&gpio1 1 GPIO_ACTIVE_HIGH> // LH Thumb
 		;
+	input-gpios
+		= <&gpio1 8 GPIO_ACTIVE_HIGH>; // LH COL6
 };
 
