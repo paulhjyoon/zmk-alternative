@@ -103,6 +103,21 @@ config USB_NUMOF_EP_WRITE_RETRIES
 config USB_HID_POLL_INTERVAL_MS
 	default 1
 
+config ZMK_USB_BOOT
+	bool "USB Boot Protocol Support"
+	default y
+	select USB_HID_BOOT_PROTOCOL
+	select USB_DEVICE_SOF
+
+if ZMK_USB_BOOT
+
+# Declare boot keyboard interface
+config USB_HID_PROTOCOL_CODE
+	default 1
+
+#ZMK_USB_BOOT
+endif
+
 #ZMK_USB
 endif
 
@@ -114,7 +129,7 @@ menuconfig ZMK_BLE
 	select BT_SMP_APP_PAIRING_ACCEPT
 	select BT_PERIPHERAL
 	select BT_DIS
-	select BT_BAS
+	select BT_BAS if !ZMK_SPLIT_ROLE_CENTRAL
 	select BT_SETTINGS
 	select SETTINGS
 
@@ -294,6 +309,20 @@ config ZMK_BACKLIGHT_AUTO_OFF_USB
 #ZMK_BACKLIGHT
 endif
 
+menuconfig ZMK_LED_INDICATORS
+	bool "LED indicators"
+	select LED
+
+if ZMK_LED_INDICATORS
+
+config ZMK_LED_INDICATORS_BRT
+	int "Brightness in percent"
+	range 1 100
+	default 80
+
+#ZMK_LED_INDICATORS
+endif
+
 #Display/LED Options
 endmenu
 
@@ -322,6 +351,15 @@ endif
 config ZMK_EXT_POWER
 	bool "Enable support to control external power output"
 	default y
+
+if ZMK_EXT_POWER
+
+config ZMK_EXT_POWER_START
+	bool "Enable external power output by default"
+	default y
+
+#ZMK_EXT_POWER
+endif
 
 #Power Management
 endmenu

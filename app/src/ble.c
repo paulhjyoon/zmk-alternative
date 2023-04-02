@@ -62,8 +62,30 @@ enum advertising_type {
 static struct zmk_ble_profile profiles[ZMK_BLE_PROFILE_COUNT];
 static uint8_t active_profile;
 
+#if IS_ENABLED(CONFIG_BT_DEVICE_NAME_APPEND_SN)
+
+static char bt_device_name[sizeof(CONFIG_BT_DEVICE_NAME) + CONFIG_BT_DEVICE_NAME_SN_BYTES];
+
+void fill_serial_number(char *buf, int length);
+
+// configure the BT device name by appending a serial number prefix to
+// CONFIG_BT_DEVICE_NAME
+void init_bt_device_name() {
+    strncpy(bt_device_name, CONFIG_BT_DEVICE_NAME, sizeof(bt_device_name));
+    fill_serial_number(bt_device_name + sizeof(CONFIG_BT_DEVICE_NAME) - 1,
+                       CONFIG_BT_DEVICE_NAME_SN_BYTES);
+    bt_device_name[sizeof(bt_device_name) - 1] = '\0';
+}
+
+#define DEVICE_NAME bt_device_name
+#define DEVICE_NAME_LEN (sizeof(bt_device_name) - 1)
+
+#else
+
 #define DEVICE_NAME CONFIG_BT_DEVICE_NAME
 #define DEVICE_NAME_LEN (sizeof(DEVICE_NAME) - 1)
+
+#endif
 
 BUILD_ASSERT(DEVICE_NAME_LEN <= 16, "ERROR: BLE device name is too long. Max length: 16");
 
@@ -122,6 +144,44 @@ bool zmk_ble_active_profile_is_connected() {
     bt_conn_unref(conn);
 
     return true;
+}
+
+int zmk_ble_prof_disconnect(uint8_t index) {
+    if (index >= ZMK_BLE_PROFILE_COUNT)
+        return -1;
+
+    bt_addr_le_t *addr = &profiles[index].peer;
+    struct bt_conn *conn;
+    int result;
+
+    if (!bt_addr_le_cmp(addr, BT_ADDR_LE_ANY)) {
+        return -1;
+    } else if ((conn = bt_conn_lookup_addr_le(BT_ID_DEFAULT, addr)) == NULL) {
+        return -1;
+    }
+
+    result = bt_conn_disconnect(conn, BT_HCI_ERR_REMOTE_USER_TERM_CONN);
+    LOG_DBG("Disconnected from profile %d: %d", index, result);
+
+    bt_conn_unref(conn);
+    return result;
+}
+
+int8_t zmk_ble_profile_status(uint8_t index) {
+    if (index >= ZMK_BLE_PROFILE_COUNT)
+        return -1;
+    bt_addr_le_t *addr = &profiles[index].peer;
+    struct bt_conn *conn;
+    int result;
+    if (!bt_addr_le_cmp(addr, BT_ADDR_LE_ANY)) {
+        result = 0; // disconnected
+    } else if ((conn = bt_conn_lookup_addr_le(BT_ID_DEFAULT, addr)) == NULL) {
+        result = 1; // paired
+    } else {
+        result = 2; // connected
+        bt_conn_unref(conn);
+    }
+    return result;
 }
 
 #define CHECKED_ADV_STOP()                                                                         \
@@ -219,7 +279,33 @@ int zmk_ble_clear_bonds() {
     return 0;
 };
 
+int zmk_ble_clear_all_bonds() {
+    LOG_DBG("zmk_ble_clear_all_bonds()");
+
+    // Unpair all profiles
+    for (uint8_t i = 0; i < ZMK_BLE_PROFILE_COUNT; i++) {
+        if (bt_addr_le_cmp(&profiles[i].peer, BT_ADDR_LE_ANY)) {
+            bt_unpair(BT_ID_DEFAULT, &profiles[i].peer);
+            set_profile_address(i, BT_ADDR_LE_ANY);
+        }
+    }
+
+    // Automatically switch to profile 0
+    zmk_ble_prof_select(0);
+
+    return 0;
+};
+
 int zmk_ble_active_profile_index() { return active_profile; }
+
+int zmk_ble_profile_index(const bt_addr_le_t *addr) {
+    for (int i = 0; i < ZMK_BLE_PROFILE_COUNT; i++) {
+        if (bt_addr_le_cmp(addr, &profiles[i].peer) == 0) {
+            return i;
+        }
+    }
+    return -ENODEV;
+}
 
 #if IS_ENABLED(CONFIG_SETTINGS)
 static void ble_save_profile_work(struct k_work *work) {
@@ -572,6 +658,10 @@ static void zmk_ble_ready(int err) {
 }
 
 static int zmk_ble_init(const struct device *_arg) {
+#if IS_ENABLED(CONFIG_BT_DEVICE_NAME_APPEND_SN)
+    init_bt_device_name();
+#endif
+
     int err = bt_enable(NULL);
 
     if (err) {
@@ -592,7 +682,12 @@ static int zmk_ble_init(const struct device *_arg) {
 
     settings_load_subtree("ble");
     settings_load_subtree("bt");
+#endif
 
+#if IS_ENABLED(CONFIG_BT_DEVICE_NAME_APPEND_SN)
+    if (strcmp(bt_get_name(), bt_device_name) != 0) {
+        bt_set_name(bt_device_name);
+    }
 #endif
 
 #if IS_ENABLED(CONFIG_ZMK_BLE_CLEAR_BONDS_ON_START)

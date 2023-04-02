@@ -63,6 +63,7 @@ int zmk_endpoints_select(enum zmk_endpoint endpoint) {
 }
 
 enum zmk_endpoint zmk_endpoints_selected() { return current_endpoint; }
+bool zmk_endpoints_preferred_is_active() { return preferred_endpoint == current_endpoint; }
 
 int zmk_endpoints_toggle() {
     enum zmk_endpoint new_endpoint =
@@ -71,12 +72,11 @@ int zmk_endpoints_toggle() {
 }
 
 static int send_keyboard_report() {
-    struct zmk_hid_keyboard_report *keyboard_report = zmk_hid_get_keyboard_report();
 
     switch (current_endpoint) {
 #if IS_ENABLED(CONFIG_ZMK_USB)
     case ZMK_ENDPOINT_USB: {
-        int err = zmk_usb_hid_send_report((uint8_t *)keyboard_report, sizeof(*keyboard_report));
+        int err = zmk_usb_hid_send_keyboard_report();
         if (err) {
             LOG_ERR("FAILED TO SEND OVER USB: %d", err);
         }
@@ -86,7 +86,7 @@ static int send_keyboard_report() {
 
 #if IS_ENABLED(CONFIG_ZMK_BLE)
     case ZMK_ENDPOINT_BLE: {
-        int err = zmk_hog_send_keyboard_report(&keyboard_report->body);
+        int err = zmk_hog_send_keyboard_report(&zmk_hid_get_keyboard_report()->body);
         if (err) {
             LOG_ERR("FAILED TO SEND OVER HOG: %d", err);
         }
@@ -101,12 +101,10 @@ static int send_keyboard_report() {
 }
 
 static int send_consumer_report() {
-    struct zmk_hid_consumer_report *consumer_report = zmk_hid_get_consumer_report();
-
     switch (current_endpoint) {
 #if IS_ENABLED(CONFIG_ZMK_USB)
     case ZMK_ENDPOINT_USB: {
-        int err = zmk_usb_hid_send_report((uint8_t *)consumer_report, sizeof(*consumer_report));
+        int err = zmk_usb_hid_send_consumer_report();
         if (err) {
             LOG_ERR("FAILED TO SEND OVER USB: %d", err);
         }
@@ -116,7 +114,7 @@ static int send_consumer_report() {
 
 #if IS_ENABLED(CONFIG_ZMK_BLE)
     case ZMK_ENDPOINT_BLE: {
-        int err = zmk_hog_send_consumer_report(&consumer_report->body);
+        int err = zmk_hog_send_consumer_report(&zmk_hid_get_consumer_report()->body);
         if (err) {
             LOG_ERR("FAILED TO SEND OVER HOG: %d", err);
         }
