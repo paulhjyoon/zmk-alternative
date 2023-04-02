@@ -608,6 +608,15 @@ static int zmk_ble_init(const struct device *_arg) {
         if (err) {
             LOG_ERR("Failed to delete setting: %d", err);
         }
+    for (int i = 0; i < ZMK_BLE_SPLIT_PERIPHERAL_COUNT; i++) {
+        char setting_name[32];
+        sprintf(setting_name, "ble/peripheral_addresses/%d", i);
+        err = settings_delete(setting_name);
+        if (err) {
+            LOG_ERR("Failed to delete peripheral setting: %d", err);
+        }
+    }
+
     }
 #endif
 
