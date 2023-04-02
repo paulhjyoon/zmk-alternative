@@ -600,6 +600,16 @@ static int zmk_ble_init(const struct device *_arg) {
 
     bt_unpair(BT_ID_DEFAULT, NULL);
 
+    for (int j = 0; j < ZMK_BLE_SPLIT_PERIPHERAL_COUNT; j++) {
+        char setting_name[32];
+        sprintf(setting_name, "ble/peripheral_addresses/%d", j);
+        LOG_DBG("Clearing all existing BLE bond information from the keyboard");
+        err = settings_delete(setting_name);
+        if (err) {
+            LOG_ERR("Failed to delete peripheral setting: %d", err);
+        }
+    }
+
     for (int i = 0; i < ZMK_BLE_PROFILE_COUNT; i++) {
         char setting_name[15];
         sprintf(setting_name, "ble/profiles/%d", i);
@@ -608,16 +618,8 @@ static int zmk_ble_init(const struct device *_arg) {
         if (err) {
             LOG_ERR("Failed to delete setting: %d", err);
         }
-    for (int i = 0; i < ZMK_BLE_SPLIT_PERIPHERAL_COUNT; i++) {
-        char setting_name[32];
-        sprintf(setting_name, "ble/peripheral_addresses/%d", i);
-        err = settings_delete(setting_name);
-        if (err) {
-            LOG_ERR("Failed to delete peripheral setting: %d", err);
-        }
     }
 
-    }
 #endif
 
     bt_conn_cb_register(&conn_callbacks);
