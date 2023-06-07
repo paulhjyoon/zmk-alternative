@@ -50,6 +50,7 @@ let
         unwrappedCC = pkgs.gcc-arm-embedded;
       };
     };
+    zmk_glove80_lh = zmk.override { board = "glove80_lh"; };
     zmk_glove80_rh = zmk.override { board = "glove80_rh"; };
     realpath_coreutils = if pkgs.stdenv.isDarwin then pkgs.coreutils else pkgs.busybox;
   in pkgs.writeShellScriptBin "compileZmk" ''
@@ -84,13 +85,13 @@ let
 
     if [ -n "$DEBUG" ]; then ccache -z; fi
 
-    cmake -G Ninja -S ${zmk'.src}/app ${lib.escapeShellArgs zmk'.cmakeFlags} "-DUSER_CACHE_DIR=/tmp/.cache" "-DKEYMAP_FILE=$KEYMAP" "-DCONF_FILE=$KCONFIG" -DBOARD=glove80_lh
+    cmake -G Ninja -S ${zmk'.src}/app ${lib.escapeShellArgs zmk'.cmakeFlags} "-DUSER_CACHE_DIR=/tmp/.cache" "-DKEYMAP_FILE=$KEYMAP" "-DCONF_FILE=$KCONFIG" -DBOARD=nrf52480_m2
 
     ninja
 
     if [ -n "$DEBUG" ]; then ccache -s; fi
 
-    cat zephyr/zmk.uf2 ${zmk_glove80_rh}/zmk.uf2 > zephyr/combined.uf2
+    cat zephyr/zmk.uf2 ${zmk_glove80_lh}/zmk.uf2 ${zmk_glove80_rh}/zmk.uf2 > zephyr/combined.uf2
   '';
 
   ccacheCache = pkgs.runCommandNoCC "ccache-cache" {
