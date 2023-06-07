@@ -1,7 +1,7 @@
 { stdenvNoCC, lib, buildPackages
 , cmake, ninja, dtc, gcc-arm-embedded
 , zephyr
-, board ? "nrf52840_m2"
+, board ? "glove80_lh"
 , shield ? null
 , keymap ? null
 , kconfig ? null
