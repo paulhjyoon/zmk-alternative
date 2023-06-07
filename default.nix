@@ -20,10 +20,10 @@ makeScope newScope (self: with self; {
     };
   });
 
-  combine_uf2 = a: b: c: pkgs.runCommandNoCC "combined_${a.name}_${b.name}_${c.name}" {}
+  combine_uf2 = a: b: pkgs.runCommandNoCC "combined_${a.name}_${b.name}" {}
   ''
     mkdir -p $out
-    cat ${a}/zmk.uf2 ${b}/zmk.uf2 ${c}/zmk.uf2 > $out/glove80.uf2
+    cat ${a}/zmk.uf2 ${b}/zmk.uf2 > $out/glove80.uf2
   '';
 
   zephyr = callPackage ./nix/zephyr.nix { };
@@ -34,10 +34,6 @@ makeScope newScope (self: with self; {
     shield = "settings_reset";
   };
 
-  glove80_dongle = zmk.override {
-    board = "nrf52840_m2";
-  };
-
   glove80_left = zmk.override {
     board = "glove80_lh";
   };
@@ -46,7 +42,7 @@ makeScope newScope (self: with self; {
     board = "glove80_rh";
   };
 
-  glove80_combined = combine_uf2 glove80_dongle glove80_left glove80_right;
+  glove80_combined = combine_uf2 glove80_left glove80_right;
 
   glove80_v0_left = zmk.override {
     board = "glove80_v0_lh";
