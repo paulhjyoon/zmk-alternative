@@ -1,11 +1,19 @@
 # Copyright (c) 2021 The ZMK Contributors
 # SPDX-License-Identifier: MIT
 
+if BOARD_NRF52840_M2
+config BOARD
+	default "nrf52480_m2"
+config ZMK_SPLIT_BLE_ROLE_CENTRAL
+	default y
+config ZMK_KEYBOARD_NAME
+	default "Glove80 Dongle"
+endif # BOARD_NRF52840_M2
+
+
 if BOARD_GLOVE80_LH
 config BOARD
 	default "glove80 lh"
-config ZMK_SPLIT_BLE_ROLE_CENTRAL
-	default y
 config ZMK_KEYBOARD_NAME
 	default "Glove80 Left"
 endif # BOARD_GLOVE80_LH
@@ -19,7 +27,7 @@ config ZMK_KEYBOARD_NAME
 endif # BOARD_GLOVE80_RH
 
 
-if BOARD_GLOVE80_LH || BOARD_GLOVE80_RH
+if BOARD_NRF52840_M2 || BOARD_GLOVE80_LH || BOARD_GLOVE80_RH
 config ZMK_SPLIT
 	default y
 
@@ -59,4 +67,4 @@ config PWM
 config LED_PWM
     default y
 endif # ZMK_BACKLIGHT
-endif # BOARD_GLOVE80_LH || BOARD_GLOVE80_RH
+endif # BOARD_NRF52840_M2 || BOARD_GLOVE80_LH || BOARD_GLOVE80_RH
