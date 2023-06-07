@@ -12,7 +12,7 @@ on:
 
 jobs:
   build:
-    if: github.repository == 'paulhjyoon/zmk'
+    if: github.repository == 'moergo-sc/zmk'
     runs-on: ubuntu-latest
     # These permissions are needed to interact with GitHub's OIDC Token endpoint.
     permissions:
