@@ -31,7 +31,7 @@ jobs:
         with:
           name: moergo-glove80-zmk-dev
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-          skipPush: "${{ github.repository != 'moergo-sc/zmk' }}"
+          skipPush: "${{ github.repository != 'paulhjyoon/zmk' }}"
       - name: Build Glove80 combined firmware
         run: nix-build -A glove80_combined -o combined
       - name: Copy result out of nix store
@@ -44,7 +44,7 @@ jobs:
   release:
     name: Create Release for Tag
     if: >-
-      github.repository == 'moergo-sc/zmk'
+      github.repository == 'paulhjyoon/zmk'
       && github.event_name == 'push'
       && contains(github.ref, 'refs/tags/v')
     needs: build
