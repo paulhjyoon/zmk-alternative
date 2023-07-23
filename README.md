@@ -24,7 +24,7 @@ Please see the instructions below for creating this setup.
 - Seemless use with a KVM
 - RGB Underglow
 
-## To be addressed
+## <a id='to-address'> To be Addressed</a>
 - All RGB indicators
     - Currently only see the power level of the left hand Glove80
 - Dongle pairing issue
@@ -160,17 +160,21 @@ west build -p -d build/dongle -b nordic_nrf52840_dongle_slicemk -- -DSHIELD=glov
 ```
 
 ### Installing Firmware
-To install the firmware we are just required to copy over the files to our devices. First we need to place our devices in DFU mode.
+To install the firmware we are just required to copy over the files to our devices. First we will reset our bluetooth pairing bonds and then place our devices in DFU mode.
 
 #### Glove80 Left Hand 
-1. First turn off the Glove80 left hand side and connect a USB from the Glove80 to your computer. 
-2. For the left hand side, and the default key layout, press and hold `Magic` and `E`. While this is being held, switch on the power switch of the left hand side.
-3. Your bootloader will then appear as USB Mass Storage Device `GLV80LHBOOT` which signifies being in DFU mode.
-4. Copy the file `app/build/glove80_lh/zephyr/zmk.uf2` (or your specified location) to the root directory of the USB Mass Storage device. 
+1. First turn off the Glove80 left hand side via the power switch.
+2. To reset the bonds, on the default key layout, press and hold `Magic` and `3` while switching the power button on. Hold these keys for 10 seconds.
+3. Now turn off the Glove80 left hand side and connect a USB from the Glove80 to your computer. 
+4. To enter DFU mode, on the default key layout, press and hold `Magic` and `E`. While this is being held, switch on the power switch of the left hand side.
+5. Your bootloader will then appear as USB Mass Storage Device `GLV80LHBOOT` which signifies being in DFU mode.
+6. Copy the file `app/build/glove80_lh/zephyr/zmk.uf2` (or your specified location) to the root directory of the USB Mass Storage device. 
 
 #### Glove80 Right Hand
-1. First turn off the Glove80 right hand side and connect a USB from the Glove80 to your computer.
-2. For the right hand side, and the default key layout, press and hold `I` and `PgDn`. While this is being held, switch on the power switch of the right hand side.
+1. First turn off the Glove80 right hand side via the power switch.
+2. To reset the bonds, on the default key layout, press and hold `PgDn` and `8` while switching the power button on. Hold these keys for 10 seconds.
+3. Now turn off the Glove80 right hand side and connect a USB from the Glove80 to your computer. 
+2. To enter DFU mode, on the default key layout,press and hold `I` and `PgDn`. While this is being held, switch on the power switch of the right hand side.
 3. Your bootloader will then appear as USB Mass Storage Device `GLV80RHBOOT` which signifies being in DFU mode.
 4. Copy the file `app/build/glove80_rh/zephyr/zmk.uf2` to the root directory of the USB Mass Storage device. 
 
@@ -180,7 +184,12 @@ To install the firmware we are just required to copy over the files to our devic
 2. Copy the file `app/build/dongle/zephyr/zmk.uf2` to the root directory of the USB Mass Storage device. 
 
 ### Post Installation
-If all things went well you should be able to type successfully! 
+If all things went well you should be able to type successfully via your nRF52840 dongle. 
+
+If you are still have some trouble: 
+- Try and reset the bonds for each individual Glove80 (step 2 in the above section)
+- Try the dongle pairing issue fix mentioned under [To be Addressed](#to-address)
+- Check out the troubleshooting section 
 
 </details>
 
@@ -198,3 +207,4 @@ If you are finding that the Glove80 is no longer pairing with the nRF52840 dongl
 
 2. Put the nRF52840 into DFU mode by double pressing the reset switch in quick succession.
 3. Copy over the file from `app/build/settings_reset/zephyr/zmk.uf2` to the root directory of the USB Mass Storage device. 
+
