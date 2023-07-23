@@ -18,6 +18,8 @@ This branch aims to allow the Glove80 to be used with an nRF52840 dongle. This w
 
 Please see the instructions below for creating this setup. 
 
+**Note: This is not an official release from MoErgo. Proceed with caution. If the steps are not followed correctly you may damage your nRF52840 and/or your Glove80. I will not be responsible for any damage as a result of following this guide.**
+
 ## Features
 - Charge Glove80s once every 4 months 
     - My experience seems to be that they will last even longer than this...
