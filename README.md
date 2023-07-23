@@ -49,6 +49,10 @@ Before you begin, make sure you have the following:
 
 - nRF52840 dongle
 - ST-Link-V2/J-Link
+- [`OpenOCD`](https://openocd.org/pages/getting-openocd.html)
+```bash
+apt-get install openocd
+```
 - `nrf52840_bboard_bootloader-<version>.hex` firmware file from [Adafruit's Github.](https://github.com/adafruit/Adafruit_nRF52_Bootloader/releases)
 
 
