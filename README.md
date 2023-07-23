@@ -130,6 +130,9 @@ Remember to adjust the filenames, paths, and configurations according to your sp
 
 <summary> These are the steps to build and install the relevant firmware for your Glove80 and dongle. </summary> 
 
+### Prerequisites 
+Prior to proceeding please see the [ZMK documentation](https://zmk.dev/docs/development/setup) about installing all dependencies so you can build your firmware locally.
+
 ### Importing a Custom Keymap
 
 To copy over an existing keymap, export your keymap from the Glove80 layout editor. If you already have your keymap file in a different location, that will work too.
@@ -197,7 +200,7 @@ If you are still have some trouble:
 <details>
 <summary> Steps to help resolve issues. </summary>
 
-Before proceeding try some of the steps contained within [Post Installation](#post-installation).
+Before proceeding try some of the steps contained within [Post Installation](#post-installation) within Installing Firmware.
 
 ### Clearing Bonds
 If you are finding that the Glove80 is no longer pairing with the nRF52840 dongle, and have tried the steps above for the pairing issue, you can reset the bonds of your Glove80 and your dongle. 
