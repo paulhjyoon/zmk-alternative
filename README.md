@@ -183,7 +183,7 @@ To install the firmware we are just required to copy over the files to our devic
 2. Your bootloader will then appear as USB Mass Storage Device `BBOARDBOOT` which signifies being in DFU mode.  
 2. Copy the file `app/build/dongle/zephyr/zmk.uf2` to the root directory of the USB Mass Storage device. 
 
-### Post Installation
+### <a id='post-installation'>Post Installation</a>
 If all things went well you should be able to type successfully via your nRF52840 dongle. 
 
 If you are still have some trouble: 
@@ -194,6 +194,10 @@ If you are still have some trouble:
 </details>
 
 ## Troubleshooting
+<details>
+<summary> Steps to help resolve issues. </summary>
+
+Before proceeding try some of the steps contained within [Post Installation](#post-installation).
 
 ### Clearing Bonds
 If you are finding that the Glove80 is no longer pairing with the nRF52840 dongle, and have tried the steps above for the pairing issue, you can reset the bonds of your Glove80 and your dongle. 
@@ -206,5 +210,24 @@ If you are finding that the Glove80 is no longer pairing with the nRF52840 dongl
     ```
 
 2. Put the nRF52840 into DFU mode by double pressing the reset switch in quick succession.
-3. Copy over the file from `app/build/settings_reset/zephyr/zmk.uf2` to the root directory of the USB Mass Storage device. 
+3. Copy over the file from `app/build/settings_reset/zephyr/zmk.uf2` to the root directory of the USB Mass Storage device. Once copied over this will reset the bonds
+4. Enter DFU mode by clicking reset twice in quick succession
+5. Now copy over the nRF52840 dongle you previously built to `BBOARDBOOT` USB Mass Storage device
 
+#### Glove80 Left Hand 
+1. First turn off the Glove80 left hand side via the power switch.
+2. To reset the bonds, on the default key layout, press and hold `Magic` and `3` while switching the power button on. Hold these keys for 10 seconds.
+
+#### Glove80 Right Hand 
+1. First turn off the Glove80 right hand side via the power switch.
+2. To reset the bonds, on the default key layout, press and hold `PgDn` and `8` while switching the power button on. Hold these keys for 10 seconds.
+
+### Viewing Logs
+By default, logging is enabled on the nRF52840. Usually this is turned off for wireless keyboards as it drains the battery. To view the logs you can use `tio` via following command:
+
+```bash
+sudo tio /dev/ttyACM0
+```
+
+The information here should be used to help with further debugging. 
+</details>
