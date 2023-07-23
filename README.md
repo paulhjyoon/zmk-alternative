@@ -174,10 +174,27 @@ To install the firmware we are just required to copy over the files to our devic
 3. Your bootloader will then appear as USB Mass Storage Device `GLV80RHBOOT` which signifies being in DFU mode.
 4. Copy the file `app/build/glove80_rh/zephyr/zmk.uf2` to the root directory of the USB Mass Storage device. 
 
-#### Dongle
+#### nRF52840 Dongle
 1. Double press the reset switch in quick succession to enter DFU mode.
 2. Your bootloader will then appear as USB Mass Storage Device `BBOARDBOOT` which signifies being in DFU mode.  
 2. Copy the file `app/build/dongle/zephyr/zmk.uf2` to the root directory of the USB Mass Storage device. 
 
+### Post Installation
+If all things went well you should be able to type successfully! 
 
 </details>
+
+## Troubleshooting
+
+### Clearing Bonds
+If you are finding that the Glove80 is no longer pairing with the nRF52840 dongle, and have tried the steps above for the pairing issue, you can reset the bonds of your Glove80 and your dongle. 
+
+#### nRF52840 Dongle
+
+1. First build the settings reset firmware via the following:
+    ```bash
+    west build -p -d build/settings_reset -b nice_nano -- -DSHIELD=settings_reset
+    ```
+
+2. Put the nRF52840 into DFU mode by double pressing the reset switch in quick succession.
+3. Copy over the file from `app/build/settings_reset/zephyr/zmk.uf2` to the root directory of the USB Mass Storage device. 
