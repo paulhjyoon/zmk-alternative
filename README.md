@@ -17,6 +17,27 @@ To review features, check out the [feature overview](https://zmk.dev/docs/). ZMK
 This branch aims to allow the Glove80 to be used with an nRF52840 dongle. This will allow both Glove80s to work as peripherals where the dongle will act as the central.
 
 Please see the instructions below for creating this setup. 
+
+## Features
+- Charge Glove80s once every 4 months 
+    - My experience seems to be that they will last even longer than this...
+- Seemless use with a KVM
+- RGB Underglow
+
+## To be addressed
+- All RGB indicators
+    - Currently only see the power level of the left hand Glove80
+- Dongle pairing issue
+    - It can be the case that if you remove and reinsert the dongle from your USB slot, it may not connect to your Glove80s again immediately. The current fix is:
+        1. Turn off both Glove80s
+        2. Place the nRF52840 dongle into DFU mode by pressing reset twice
+        3. Remove the nRF52840 dongle from the USB port
+        4. Place the nRF52840 dongle back into the USB port
+        5. Turn one Glove80 on and start typing until you see a response
+        6. Turn the other Glove80 on and start typing until you see a response
+
+        **Note: Repeat the steps if this didn't work the first time.**
+
 ## Flashing nRF52840 with Adafruit's nrf52 Bootloader
 
 <details>
