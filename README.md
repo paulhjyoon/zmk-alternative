@@ -121,3 +121,63 @@ apt-get install openocd
    This will close the Telnet session.
 
 Remember to adjust the filenames, paths, and configurations according to your specific setup. If you are using a J-Link, make sure to connect VDD and GND to power the nRF52840 during the programming process. If you are using an ST-Link-V2, refrain from disconnecting the nRF52840 after performing the mass erase to avoid potential communication issues. Always exercise caution when working with bootloaders and firmware.
+
+</details>
+
+## Installing Firmware
+
+<details>
+
+<summary> These are the steps to build and install the relevant firmware for your Glove80 and dongle. </summary> 
+
+### Importing a Custom Keymap
+
+To copy over an existing keymap, export your keymap from the Glove80 layout editor. If you already have your keymap file in a different location, that will work too.
+
+This keymap file needs to be copied to:
+
+```bash
+app/boards/shields/glove80_dongle/glove80_dongle.keymap
+```
+**Note: Ensure that the file name is `glove80_dongle.keymap`**
+### Building Firmware
+
+There are three separate files we will build, one for each half of our Glove80 and one for the dongle. First change into the app directory by:
+```bash
+cd app
+```
+You can then run the following commands, `-d` specifies the directory so feel free to specify a different location. 
+```bash
+west build -p -d build/glove80_lh -b glove80_lh
+```
+
+```bash
+west build -p -d build/glove80_rh -b glove80_rh
+```
+
+```bash
+west build -p -d build/dongle -b nordic_nrf52840_dongle_slicemk -- -DSHIELD=glove80_dongle
+```
+
+### Installing Firmware
+To install the firmware we are just required to copy over the files to our devices. First we need to place our devices in DFU mode.
+
+#### Glove80 Left Hand 
+1. First turn off the Glove80 left hand side and connect a USB from the Glove80 to your computer. 
+2. For the left hand side, and the default key layout, press and hold `Magic` and `E`. While this is being held, switch on the power switch of the left hand side.
+3. Your bootloader will then appear as USB Mass Storage Device `GLV80LHBOOT` which signifies being in DFU mode.
+4. Copy the file `app/build/glove80_lh/zephyr/zmk.uf2` (or your specified location) to the root directory of the USB Mass Storage device. 
+
+#### Glove80 Right Hand
+1. First turn off the Glove80 right hand side and connect a USB from the Glove80 to your computer.
+2. For the right hand side, and the default key layout, press and hold `I` and `PgDn`. While this is being held, switch on the power switch of the right hand side.
+3. Your bootloader will then appear as USB Mass Storage Device `GLV80RHBOOT` which signifies being in DFU mode.
+4. Copy the file `app/build/glove80_rh/zephyr/zmk.uf2` to the root directory of the USB Mass Storage device. 
+
+#### Dongle
+1. Double press the reset switch in quick succession to enter DFU mode.
+2. Your bootloader will then appear as USB Mass Storage Device `BBOARDBOOT` which signifies being in DFU mode.  
+2. Copy the file `app/build/dongle/zephyr/zmk.uf2` to the root directory of the USB Mass Storage device. 
+
+
+</details>
