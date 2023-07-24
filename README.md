@@ -26,19 +26,20 @@ Please see the instructions below for creating this setup.
 - Seemless use with a KVM
 - RGB Underglow
 
+## <a id="notes"> Notes </a>
+- Reconnecting the Dongle
+    - It can be the case that if you remove and reinsert the dongle from your USB slot, it may not connect to your Glove80s again immediately. The current method is:
+        1. Turn off both Glove80s
+        2. Remove the nRF52840 dongle from the USB port
+        3. Place the nRF52840 dongle back into the USB port
+        4. Turn one Glove80 on and start typing until you see a response
+        5. Turn the other Glove80 on and start typing until you see a response
+
+        **Note: Repeat the steps if this didn't work the first time and wait a few seconds between each step.**
+
 ## <a id='to-address'> To be Addressed</a>
 - All RGB indicators
-    - Currently only see the power level of the left hand Glove80
-- Dongle pairing issue
-    - It can be the case that if you remove and reinsert the dongle from your USB slot, it may not connect to your Glove80s again immediately. The current fix is:
-        1. Turn off both Glove80s
-        2. Place the nRF52840 dongle into DFU mode by pressing reset twice
-        3. Remove the nRF52840 dongle from the USB port
-        4. Place the nRF52840 dongle back into the USB port
-        5. Turn one Glove80 on and start typing until you see a response
-        6. Turn the other Glove80 on and start typing until you see a response
-
-        **Note: Repeat the steps if this didn't work the first time.**
+    - Currently we can only see the power level of the left hand Glove80
 
 ## Flashing nRF52840 with Adafruit's nrf52 Bootloader
 
@@ -51,10 +52,10 @@ Before you begin, make sure you have the following:
 
 - nRF52840 dongle
 - ST-Link-V2/J-Link
-- [`OpenOCD`](https://openocd.org/pages/getting-openocd.html)
-```bash
-apt-get install openocd
-```
+- [OpenOCD](https://openocd.org/pages/getting-openocd.html)
+   ```bash
+   apt-get install openocd
+   ```
 - `nrf52840_bboard_bootloader-<version>.hex` firmware file from [Adafruit's Github.](https://github.com/adafruit/Adafruit_nRF52_Bootloader/releases)
 
 
@@ -192,8 +193,8 @@ To install the firmware we are just required to copy over the files to our devic
 If all things went well you should be able to type successfully via your nRF52840 dongle. 
 
 If you are still have some trouble: 
+- Try reconnecting with the dongle method mentioned under [Notes](#notes)
 - Try and reset the bonds for each individual Glove80 (step 2 in the above section)
-- Try the dongle pairing issue fix mentioned under [To be Addressed](#to-address)
 - Check out the troubleshooting section 
 
 </details>
