@@ -58,7 +58,7 @@ void usb_status_cb(enum usb_dc_status_code status, const uint8_t *params) {
 
 #if IS_ENABLED(CONFIG_ZMK_USB_BOOT)
     if (status == USB_DC_RESET) {
-        zmk_usb_hid_set_protocol(HID_PROTOCOL_REPORT);
+        zmk_usb_hid_set_protocol(HID_PROTOCOL_BOOT);
     }
 #endif
     usb_status = status;
