@@ -32,7 +32,7 @@ static void in_ready_cb(const struct device *dev) { k_sem_give(&hid_sem); }
 #define HID_REPORT_TYPE_FEATURE 0x300
 
 #if IS_ENABLED(CONFIG_ZMK_USB_BOOT)
-static uint8_t hid_protocol = HID_PROTOCOL_BOOT;
+static uint8_t hid_protocol = HID_PROTOCOL_REPORT;
 
 static void set_proto_cb(const struct device *dev, uint8_t protocol) { hid_protocol = protocol; }
 
