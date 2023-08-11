@@ -37,5 +37,3 @@ properties:
     type: array
     required: false
     default: []
-  hold-trigger-on-release:
-    type: boolean
