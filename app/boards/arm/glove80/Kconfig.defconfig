@@ -19,6 +19,10 @@ endif # BOARD_NRF52840_M2
 if BOARD_GLOVE80_LH
 config BOARD
 	default "glove80 lh"
+
+config ZMK_SPLIT_BLE_ROLE_CENTRAL
+	default n
+
 config ZMK_KEYBOARD_NAME
 	default "Glove80 Left"
 endif # BOARD_GLOVE80_LH

@@ -112,5 +112,6 @@
 		, <&gpio1 3 GPIO_ACTIVE_HIGH> // RH COL5
 		, <&gpio1 1 GPIO_ACTIVE_HIGH> // RH COL6
 		;
+	input-gpios = <&gpio1 1 GPIO_ACTIVE_HIGH>; // Adding for firmware build
 };
 

@@ -14,6 +14,9 @@ properties:
   col-gpios:
     type: phandle-array
     required: true
+  input-gpios:
+    type: phandle-array
+    required: true
   debounce-period:
     type: int
     required: false
