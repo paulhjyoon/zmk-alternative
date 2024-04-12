@@ -5,12 +5,12 @@
  */
 
 #include <string.h>
-#include <usb/usb_device.h>
-#include <drivers/hwinfo.h>
+#include <zephyr/usb/usb_device.h>
+#include <zephyr/drivers/hwinfo.h>
 #include "usb_descriptor.h"
 
 #define LOG_LEVEL CONFIG_USB_DEVICE_LOG_LEVEL
-#include <logging/log.h>
+#include <zephyr/logging/log.h>
 LOG_MODULE_DECLARE(usb_descriptor);
 
 int base16_encode(const uint8_t *data, int length, uint8_t *result, int bufSize);

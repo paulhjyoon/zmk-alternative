@@ -1,24 +1,39 @@
-{ stdenv, lib, fetchgit }:
+{ stdenvNoCC, lib, fetchgit, runCommand }:
 let
   manifestJSON = builtins.fromJSON (builtins.readFile ./manifest.json);
 
-  projects = lib.listToAttrs (lib.forEach manifestJSON ({ name, revision, url, sha256, ... }@args: (
-    lib.nameValuePair name {
-      path = args.path or name;
+  mkModule = { name, revision, url, sha256, ... }:
+    stdenvNoCC.mkDerivation (finalAttrs: {
+      name = "zmk-module-${name}";
+
       src = fetchgit {
         inherit name url sha256;
         rev = revision;
       };
-    })
-  ));
+
+      dontUnpack = true;
+      dontBuild = true;
+
+      installPhase = ''
+        mkdir $out
+        ln -s ${finalAttrs.src} $out/${name}
+      '';
+
+      passthru = {
+        modulePath = "${finalAttrs.finalPackage}/${name}";
+      };
+   });
+
+  modules = lib.listToAttrs (lib.forEach manifestJSON ({ name, ... }@args:
+    lib.nameValuePair name (mkModule args)));
 in
 
 
 # Zephyr with no modules, from the frozen manifest.
 # For now the modules are passed through as passthru
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   name = "zephyr";
-  src = projects.zephyr.src;
+  src = modules.zephyr.src;
 
   dontBuild = true;
 
@@ -32,6 +47,6 @@ stdenv.mkDerivation {
   '';
 
   passthru = {
-    modules = map (p: p.src) (lib.attrValues (removeAttrs projects ["zephyr"]));
+    modules = removeAttrs modules ["zephyr"];
   };
 }

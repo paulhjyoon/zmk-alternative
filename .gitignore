@@ -12,3 +12,5 @@ workspace.code-workspace
 left
 result
 right
+.python-version
+.venv

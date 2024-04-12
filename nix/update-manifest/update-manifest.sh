@@ -2,8 +2,24 @@
 
 set -euo pipefail
 
+ignored_modules=(hal_espressif sof tflite-micro thrift bsim babblesim babblesim_base \
+                 babblesim_ext_2G4_libPhyComv1 babblesim_ext_2G4_channel_NtNcable \
+                 babblesim_ext_2G4_channel_multiatt babblesim_ext_2G4_modem_magic \
+                 babblesim_ext_2G4_modem_BLE_simple babblesim_ext_2G4_device_burst_interferer \
+                 babblesim_ext_2G4_device_WLAN_actmod babblesim_ext_2G4_phy_v1 \
+                 babblesim_ext_2G4_device_playback babblesim_ext_libCryptov1)
+
 prefetch_project() {
   local p=$1
+  local name
+  name="$(jq -r .name <<< "$p")"
+
+  if [[ " ${ignored_modules[*]} " =~ " ${name} " ]]; then
+    echo "Skipping: $name" >&2
+    return
+  fi
+
+  echo "Prefetching: $name" >&2
 
   sha256=$(nix-prefetch-git \
     --quiet \

@@ -5,15 +5,14 @@
  *
  */
 
-#include <kernel.h>
-#include <bluetooth/services/bas.h>
+#include <zephyr/kernel.h>
 
-#include <logging/log.h>
+#include <zephyr/logging/log.h>
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 #include <zmk/display.h>
+#include <zmk/battery.h>
 #include "battery_status.h"
-#include <src/lv_themes/lv_theme.h>
 #include <zmk/usb.h>
 #include <zmk/events/usb_conn_state_changed.h>
 #include <zmk/event_manager.h>
@@ -68,7 +67,7 @@ void battery_status_update_cb(struct battery_status_state state) {
 
 static struct battery_status_state battery_status_get_state(const zmk_event_t *eh) {
     return (struct battery_status_state) {
-        .level = bt_bas_get_battery_level(),
+        .level = zmk_battery_state_of_charge(),
 #if IS_ENABLED(CONFIG_USB_DEVICE_STACK)
         .usb_present = zmk_usb_is_powered(),
 #endif /* IS_ENABLED(CONFIG_USB_DEVICE_STACK) */
@@ -84,7 +83,7 @@ ZMK_SUBSCRIPTION(widget_battery_status, zmk_usb_conn_state_changed);
 #endif /* IS_ENABLED(CONFIG_USB_DEVICE_STACK) */
 
 int zmk_widget_battery_status_init(struct zmk_widget_battery_status *widget, lv_obj_t *parent) {
-    widget->obj = lv_img_create(parent, NULL);
+    widget->obj = lv_img_create(parent);
 
     sys_slist_append(&widgets, &widget->node);
     widget_battery_status_init();

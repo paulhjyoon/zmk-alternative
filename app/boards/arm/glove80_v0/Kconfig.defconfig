@@ -3,50 +3,53 @@
 
 if BOARD_GLOVE80_V0_LH
 config BOARD
-	default "glove80 v0 lh"
+    default "glove80 v0 lh"
 
 config ZMK_SPLIT_BLE_ROLE_CENTRAL
-	default y
+    default y
 
 config ZMK_KEYBOARD_NAME
-	default "Glove80 V0 Left"
+    default "Glove80 V0 Left"
 endif # BOARD_GLOVE80_V0_LH
 
 if BOARD_GLOVE80_V0_RH
 config BOARD
-	default "glove80 v0 rh"
+    default "glove80 v0 rh"
 
 config ZMK_KEYBOARD_NAME
-	default "Glove80 V0 Right"
+    default "Glove80 V0 Right"
 endif # BOARD_GLOVE80_V0_RH
 
 if BOARD_GLOVE80_V0_LH || BOARD_GLOVE80_V0_RH
 
 config ZMK_SPLIT
-	default y
+    default y
 
 config BT_CTLR
-	default BT
+    default BT
 
 config ZMK_BLE
-	default y
+    default y
 
 config ZMK_USB
-	default y
+    default y
 
 config ZMK_BATTERY_VOLTAGE_DIVIDER
-	default y
-	
+    default y
+
 config ZMK_BATTERY_NRF_VDDH
-	default y
+    default y
+
+config PINCTRL
+    default y
 
 if USB
 
 config USB_NRFX
-	default y
+    default y
 
 config USB_DEVICE_STACK
-	default y
+    default y
 
 endif # USB
 

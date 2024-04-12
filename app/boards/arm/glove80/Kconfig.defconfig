@@ -46,6 +46,9 @@ config ZMK_BATTERY_NRF_VDDH
 config ZMK_KSCAN_MATRIX_WAIT_BETWEEN_OUTPUTS
     default 5
 
+config PINCTRL
+    default y
+
 if USB
 config USB_NRFX
 	default y
@@ -59,6 +62,17 @@ config PWM
 config LED_PWM
     default y
 endif # ZMK_BACKLIGHT
+
+if ZMK_RGB_UNDERGLOW
+
+config SPI
+    default y
+
+config WS2812_STRIP
+    default y
+
+endif # ZMK_RGB_UNDERGLOW
+
 endif # BOARD_GLOVE80_LH || BOARD_GLOVE80_RH
 
 

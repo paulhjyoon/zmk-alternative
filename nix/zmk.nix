@@ -45,10 +45,12 @@ let
   ]);
 
   requiredZephyrModules = [
-    "cmsis" "hal_nordic" "tinycrypt" "littlefs"
+    "cmsis" "hal_nordic" "tinycrypt"  "picolibc" "lvgl" "picolibc" "segger"
   ];
 
-  zephyrModuleDeps = builtins.filter (x: builtins.elem x.name requiredZephyrModules) zephyr.modules;
+  zephyrModuleDeps =
+    let modules = lib.attrVals requiredZephyrModules zephyr.modules;
+    in map (x: x.modulePath) modules;
 in
 
 stdenvNoCC.mkDerivation {
@@ -80,7 +82,7 @@ stdenvNoCC.mkDerivation {
   cmakeFlags = [
     # "-DZephyrBuildConfiguration_ROOT=${zephyr}/zephyr"
     # TODO: is this required? if not, why not?
-    # "-DZEPHYR_BASE=${zephyr}/zephyr"
+    "-DZEPHYR_BASE=${zephyr}/zephyr"
     "-DBOARD_ROOT=."
     "-DBOARD=${board}"
     "-DZEPHYR_TOOLCHAIN_VARIANT=gnuarmemb"
@@ -94,7 +96,7 @@ stdenvNoCC.mkDerivation {
   ] ++
   (lib.optional (shield != null) "-DSHIELD=${shield}") ++
   (lib.optional (keymap != null) "-DKEYMAP_FILE=${keymap}") ++
-  (lib.optional (kconfig != null) "-DCONF_FILE=${kconfig}");
+  (lib.optional (kconfig != null) "-DEXTRA_CONF_FILE=${kconfig}");
 
   nativeBuildInputs = [ cmake ninja python dtc gcc-arm-embedded ];
   buildInputs = [ zephyr ];
@@ -102,6 +104,8 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     mkdir $out
     cp zephyr/zmk.{uf2,hex,bin,elf} $out
+    cp zephyr/.config $out/zmk.kconfig
+    cp zephyr/zephyr.dts $out/zmk.dts
   '';
 
   passthru = { inherit zephyrModuleDeps; };
