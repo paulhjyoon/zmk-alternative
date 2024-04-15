@@ -47,7 +47,7 @@
     "@docusaurus/types": "^3.0.0",
     "@docusaurus/tsconfig": "^3.0.0",
     "@types/js-yaml": "^4.0.5",
-    "@types/react": "^18.2.29",
+    "@types/react": "^18.2.78",
     "@types/react-helmet": "^6.1.6",
     "@types/react-router-dom": "^5.1.7",
     "eslint": "^8.39.0",
