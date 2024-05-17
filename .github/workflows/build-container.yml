@@ -24,7 +24,7 @@ jobs:
       REVISION_TAG: ${{ github.event.pull_request && github.event.pull_request.head.sha || github.sha  }}
       PR_NUMBER: ${{ github.event.number }}
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v4.1.6
         with:
           repository: moergo-sc/zmk
           ref: ${{ github.event.pull_request && github.event.pull_request.head.sha || github.sha }}
